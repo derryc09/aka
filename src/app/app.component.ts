@@ -12,15 +12,15 @@ export class AppComponent{
 
 
   // itemsRef: AngularFireObject<any>;
-  valueChanges: Observable<any>;
+  companies: Observable<any>;
   items: Observable<any>;
   snapshotChanges: Observable<any>;
 
   // dinosaurs$: Observable<any>;
   constructor(db: AngularFireDatabase) {
-    this.valueChanges = db.list('companies').valueChanges();
-    this.snapshotChanges = db.list('companies').snapshotChanges();
-    console.log(this.valueChanges);
+    // this.companies = db.list('companies').valueChanges();
+    // this.snapshotChanges = db.list('companies').snapshotChanges();
+    // console.log(this.valueChanges);
 
   }
 

@@ -19,27 +19,33 @@ const states = ['Alabama', 'Alaska', 'American Samoa', 'Arizona', 'Arkansas', 'C
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss']
 })
-export class SearchComponent implements OnInit{
+export class SearchComponent implements OnInit {
+  private companiesRef: Observable<any>;
+  private aliasesRef: Observable<any>;
   public model: any;
   public companies: [String];
-  valueChanges: Observable<any>;
-
+  public aliases: [String];
   constructor(db: AngularFireDatabase) {
-    this.valueChanges = db.list('companies').valueChanges();
-    console.log(this.valueChanges.forEach((item)=>{
+    console.log("constructor");
+    this.companiesRef = db.list('companies').valueChanges();
+    this.aliasesRef = db.list('aliases').valueChanges();
+    this.companiesRef.forEach((item) => {
       console.log(item);
       this.companies = _.map(item, 'company_name');
-      console.log(this.companies);
-    }));
-    console.log(db.list('companies').valueChanges());
+    })
+    this.aliasesRef.forEach((item) => {
+      console.log(item);
+    })
+
+
   }
 
 
-  ngOnInit(){
+  ngOnInit() {
     console.log("Search")
-    console.log(this.companies);
   }
-  search = (text$: Observable<string>) =>
+
+  filter = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),
       distinctUntilChanged(),
@@ -47,5 +53,11 @@ export class SearchComponent implements OnInit{
         : this.companies.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
     )
 
+
+  search(e) {
+    console.log(e);
+    console.log("Searching....");
+    console.log(e.target.value);
+  }
 
 }

@@ -1,0 +1,28 @@
+<div class="container">
+    <p>CMS</p>
+
+
+    <form [formGroup]="companyForm" (ngSubmit)="onSubmit(companyForm.value)">
+        <div class="form-group">
+            <label for="exampleInputEmail1">Company name</label>
+            <input type="email" class="form-control" id="input_companyName" formControlName="input_companyName"
+                aria-describedby="emailHelp" placeholder="Enter company name">
+        </div>
+        <div class="form-group">
+            <label for="input_alias1">Alias 1</label>
+            <input type="text" class="form-control" id="input_alias1" formControlName="input_alias1"
+                placeholder="Alias 1">
+        </div>
+        <div class="form-group">
+            <label for="input_alias2">Alias 2</label>
+            <input type="text" class="form-control" id="input_alias2" formControlName="input_alias2"
+                placeholder="Alias 2">
+        </div>
+        <div class="form-group">
+            <label for="input_alias3">Alias 3</label>
+            <input type="text" class="form-control" id="input_alias3" formControlName="input_alias3"
+                placeholder="Alias 3">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
