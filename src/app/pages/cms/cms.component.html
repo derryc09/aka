@@ -1,12 +1,17 @@
 <div class="container">
-    <p>CMS</p>
-
-
+    <h2>CMS</h2>
     <form [formGroup]="companyForm" (ngSubmit)="onSubmit(companyForm.value)">
         <div class="form-group">
             <label for="exampleInputEmail1">Company name</label>
             <input type="email" class="form-control" id="input_companyName" formControlName="input_companyName"
-                aria-describedby="emailHelp" placeholder="Enter company name">
+                aria-describedby="emailHelp" placeholder="Enter company name"
+                (keyup)="checkNameValid($event.target.value)" [ngClass]="{'is-invalid' : name_disabled || name_empty}">
+            <small class="invalid-feedback" *ngIf="name_disabled">
+                This company name already exists.
+            </small>
+            <small class="invalid-feedback" *ngIf="name_empty">
+                Company name cannot be empty.
+            </small>
         </div>
         <div class="form-group">
             <label for="input_alias1">Alias 1</label>
@@ -23,6 +28,31 @@
             <input type="text" class="form-control" id="input_alias3" formControlName="input_alias3"
                 placeholder="Alias 3">
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button [attr.disabled]="name_disabled || name_empty ? 'is-invalid' : null" type="submit" class="btn btn-primary">Submit</button>
     </form>
+</div>
+<div class="container">
+
+    <div *ngIf="items$ | async; let items; else loading">
+        <ul>
+            <li *ngFor="let item of items">
+                <code>{{ item.payload.val().name }}</code>
+                <span *ngFor="let alias of item.payload.val().alias">
+                    {{alias}}
+                </span>
+            </li>
+        </ul>
+        <div *ngIf="items.length === 0">No results, try clearing filters</div>
+    </div>
+    <ng-template #loading>Loading&hellip;</ng-template>
+    <div>
+        <h4>Filter by size</h4>
+        <button (click)="filterBy('small')">Small</button>
+        <button (click)="filterBy('medium')">Medium</button>
+        <button (click)="filterBy('large')">Large</button>
+        <button (click)="filterBy('x-large')">Extra Large</button>
+        <button (click)="filterBy(null)" *ngIf="this.size$.getValue()">
+            <em>clear filter</em>
+        </button>
+    </div>
 </div>

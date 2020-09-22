@@ -5,7 +5,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SearchComponent } from './pages/search/search.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
+
 import { AngularFireModule } from '@angular/fire';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
 
 import { environment } from '../environments/environment';
 import { CmsComponent } from './pages/cms/cms.component';
@@ -22,7 +25,8 @@ import { CmsComponent } from './pages/cms/cms.component';
     FormsModule,
     NgbModule,
     ReactiveFormsModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig)
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireDatabaseModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
-import { Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { AngularFireDatabase, AngularFireObject, AngularFireList, AngularFireAction } from '@angular/fire/database';
+import { Observable, Subject, Subscription, BehaviorSubject } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { FormBuilder } from '@angular/forms';
 import _ from 'lodash';
 
 const states = ['Alabama', 'Alaska', 'American Samoa', 'Arizona', 'Arkansas', 'California', 'Colorado',
@@ -20,24 +22,21 @@ const states = ['Alabama', 'Alaska', 'American Samoa', 'Arizona', 'Arkansas', 'C
   styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit {
-  private companiesRef: Observable<any>;
-  private aliasesRef: Observable<any>;
+  private companiesRef: AngularFireList<any>;
   public model: any;
   public companies: [String];
   public aliases: [String];
+
+  public items;
+
   constructor(db: AngularFireDatabase) {
-    console.log("constructor");
-    this.companiesRef = db.list('companies').valueChanges();
-    this.aliasesRef = db.list('aliases').valueChanges();
-    this.companiesRef.forEach((item) => {
-      console.log(item);
-      this.companies = _.map(item, 'company_name');
+    this.companiesRef = db.list('companies');
+    this.companiesRef.valueChanges().forEach((item) => {
+      this.companies = _.map(item, 'name');
+      this.items = item;
+      console.log(this.items);
+      console.log(this.companies);
     })
-    this.aliasesRef.forEach((item) => {
-      console.log(item);
-    })
-
-
   }
 
 
