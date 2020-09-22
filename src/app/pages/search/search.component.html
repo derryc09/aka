@@ -1,23 +1,21 @@
 <div class="container">
     <h1>Search</h1>
     <label for="typeahead-basic">Search for a company:</label>
-    <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="model" [ngbTypeahead]="filter"
-        (keyup.enter)="search($event)" />
-    <span class='mt-1'>Can't find the company you're looking for?</span> <a href="javascript:void(0);">Add your own</a>
+    <input id="typeahead-basic" type="text" class="form-control" [ngbTypeahead]="search" [inputFormatter]="formatter"
+        [resultFormatter]="formatter" [editable]='false' [(ngModel)]="model" [ngbTypeahead]="filter"
+        (keyup.enter)="search()" />
     <hr>
-    <pre>Model: {{ model | json }}</pre>
+    <!-- <pre>Model: {{ model | json }}</pre> -->
 </div>
 
 <div class="container">
-    <div *ngIf="items; let items; else loading">
-        <ul>
-            <li *ngFor="let item of items">
-                <code>{{ item.name }}</code>
-                <span *ngFor="let alias of item.alias">
-                    {{alias}}
-                </span>
-            </li>
-        </ul>
+    <div *ngIf="result$  | async; let items; else loading">
+        <div *ngFor="let item of items">
+            <h4>{{ item.payload.val().name }}</h4>
+            <ul *ngFor="let alias of item.payload.val().alias">
+                <li>{{alias}}</li>
+            </ul>
+        </div>
         <div *ngIf="items.length === 0">No results, try clearing filters</div>
     </div>
     <ng-template #loading>Loading&hellip;</ng-template>

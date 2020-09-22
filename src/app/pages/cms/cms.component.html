@@ -1,4 +1,7 @@
 <div class="container">
+    <span class='mt-1'>Can't find the company you're looking for?</span> <a href="javascript:void(0);">Add your own</a>
+</div>
+<div class="container">
     <h2>CMS</h2>
     <form [formGroup]="companyForm" (ngSubmit)="onSubmit(companyForm.value)">
         <div class="form-group">
@@ -28,7 +31,8 @@
             <input type="text" class="form-control" id="input_alias3" formControlName="input_alias3"
                 placeholder="Alias 3">
         </div>
-        <button [attr.disabled]="name_disabled || name_empty ? 'is-invalid' : null" type="submit" class="btn btn-primary">Submit</button>
+        <button [attr.disabled]="name_disabled || name_empty ? 'is-invalid' : null" type="submit"
+            class="btn btn-primary">Submit</button>
     </form>
 </div>
 <div class="container">

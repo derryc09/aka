@@ -60,9 +60,9 @@ export class CmsComponent {
   filterBy(size: string | null) {
     this.size$.next(size);
   }
-  checkAliasExist(name) {
+  // checkAliasExist(name) {
 
-  }
+  // }
   checkNameValid(name): Boolean {
     console.log("check Name exist");
     console.log(name);
