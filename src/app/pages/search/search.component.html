@@ -3,13 +3,27 @@
     <label for="typeahead-basic">Search for a company:</label>
     <input id="typeahead-basic" type="text" class="form-control" [ngbTypeahead]="search" [inputFormatter]="formatter"
         [resultFormatter]="formatter" [editable]='false' [(ngModel)]="model" [ngbTypeahead]="filter"
-        (keyup.enter)="search()" />
+        (keyup.enter)="search()" (keydown)="clearBoolean()" [ngClass]="{'is-invalid' : invalid_name }" />
+    <small class="invalid-feedback" *ngIf="invalid_name">
+        Oops. We are not familiar with this company yet.
+    </small>
     <hr>
-    <!-- <pre>Model: {{ model | json }}</pre> -->
 </div>
+<div class="container">
+    <div *ngIf="!cms_loaded">
+        <span class='mt-1'>Can't find the company you're looking for?</span> <a href="javascript:void(0);"
+            (click)="showCMS()">Add your own</a>
+    </div>
+    <div *ngIf="cms_loaded">
+        <span class='mt-1'>Done with adding companies?</span> <a href="javascript:void(0);" (click)="closeCMS()">Close
+            the form</a>
+    </div>
+
+</div>
+<br />
 
 <div class="container">
-    <div *ngIf="result$  | async; let items; else loading">
+    <div *ngIf="result$  | async; let items">
         <div *ngFor="let item of items">
             <h4>{{ item.payload.val().name }}</h4>
             <ul *ngFor="let alias of item.payload.val().alias">
@@ -19,5 +33,6 @@
         <div *ngIf="items.length === 0">No results, try clearing filters</div>
     </div>
     <ng-template #loading>Loading&hellip;</ng-template>
-
 </div>
+
+<app-cms *ngIf="cms_loaded"></app-cms>

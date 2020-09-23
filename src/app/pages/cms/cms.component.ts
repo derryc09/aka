@@ -4,14 +4,14 @@ import { Observable, Subject, Subscription, BehaviorSubject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { FormBuilder } from '@angular/forms';
 import _ from 'lodash';
-import { ThrowStmt } from '@angular/compiler';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-cms',
   templateUrl: './cms.component.html',
   styleUrls: ['./cms.component.scss']
 })
-export class CmsComponent {
+export class CmsComponent implements OnInit {
   companyForm;
 
   companiesRef: AngularFireList<any>;
@@ -26,6 +26,15 @@ export class CmsComponent {
   searchInput$: BehaviorSubject<string | null>;
   name_disabled: Boolean;
   name_empty: Boolean;
+
+  // Toast success message
+  private _success = new Subject<string>();
+  private _failed = new Subject<string>();
+
+  successMessage = '';
+  errorMessage = ''
+  staticAlertClosed = false;
+
 
   items;
   constructor(private formBuilder: FormBuilder, db: AngularFireDatabase) {
@@ -60,9 +69,7 @@ export class CmsComponent {
   filterBy(size: string | null) {
     this.size$.next(size);
   }
-  // checkAliasExist(name) {
 
-  // }
   checkNameValid(name): Boolean {
     console.log("check Name exist");
     console.log(name);
@@ -92,15 +99,36 @@ export class CmsComponent {
       companyData.input_alias2 !== '' ? data.alias.push(companyData.input_alias2) : ''
       companyData.input_alias3 !== '' ? data.alias.push(companyData.input_alias3) : ''
       console.log(data);
-      this.companiesRef.push(data);
+      this.companiesRef.push(data)
+        .then(() => {
+          this.changeSuccessMessage();
+        })
+        .catch((err) => {
+          console.log(err)
+          this.changeErrorMessage();
+        });
     }
 
 
 
   }
 
+  changeSuccessMessage() {
+    this._success.next('Company successully submitted.');
+  }
+  changeErrorMessage() {
+    this._success.next('Sorry, something went wrong. Your input was not saved.');
+  }
   ngOnInit(): void {
+    this._success.subscribe(message => this.successMessage = message);
+    this._success.pipe(
+      debounceTime(5000)
+    ).subscribe(() => this.successMessage = '');
 
+    this._failed.subscribe(message => this.errorMessage = message);
+    this._failed.pipe(
+      debounceTime(5000)
+    ).subscribe(() => this.errorMessage = '');
   }
   addCompany() {
 

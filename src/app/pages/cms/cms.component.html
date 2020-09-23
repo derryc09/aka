@@ -1,7 +1,4 @@
 <div class="container">
-    <span class='mt-1'>Can't find the company you're looking for?</span> <a href="javascript:void(0);">Add your own</a>
-</div>
-<div class="container">
     <h2>CMS</h2>
     <form [formGroup]="companyForm" (ngSubmit)="onSubmit(companyForm.value)">
         <div class="form-group">
@@ -34,8 +31,12 @@
         <button [attr.disabled]="name_disabled || name_empty ? 'is-invalid' : null" type="submit"
             class="btn btn-primary">Submit</button>
     </form>
+
+    <ngb-alert *ngIf="successMessage" type="success" (close)="successMessage = ''">{{ successMessage }}</ngb-alert>
+    <ngb-alert *ngIf="errorMessage" type="danger" (close)="errorMessage = ''">{{ successMessage }}</ngb-alert>
+
 </div>
-<div class="container">
+<div class="container" style="display:none;">
 
     <div *ngIf="items$ | async; let items; else loading">
         <ul>
